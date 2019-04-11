@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="DapperHelper.cs" />
-    <Compile Include="FanXingDbHelp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
