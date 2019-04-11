@@ -14,33 +14,74 @@ namespace DAL
     public class DapperHelper<T>
     {
         static IDbConnection conn = new MySqlConnection(ConfigurationSettings.AppSettings["ConnString"]);
-        public int Create(T t)
+        /// <summary>
+        /// 数据的添加
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static int Create(T t)
         {
             Type type = typeof(T);
+            //获取属性
             PropertyInfo[] pros = type.GetProperties();
             //实例化字符串进行拼接
             StringBuilder sb = new StringBuilder();
-            sb.Append("insert into " + type.Name + " values(@");
-            string sql = "";
+            sb.Append("insert into " + type.Name + "(");
+            //遍历属性值
             foreach (var item in pros)
             {
-                //判断是否为主键
-                if (item.GetCustomAttribute(typeof(KeyAttribute), true) == null)
+                //判断是不是主键带id 比如studentid
+                if (!(type.Name.ToString().ToLower() + "id").Equals(item.Name.ToString().ToLower()))
                 {
-                    sb.Append(item.Name + ",@");
+                    sb.Append(item.Name.ToString() + ",");
                 }
-                sql = sb.ToString().Substring(0, sb.Length - 2) + ")";
             }
-            return conn.Execute(sql, t);
+            //insert into student(studentName,studentSex,
+            //截取最后的,
+            sb.ToString().Substring(0, sb.ToString().LastIndexOf(','));
+            //insert into student(studentName,studentSex
+            sb.Append(") values(");
+            //insert into student(studentName,studentSex) values(
+            //遍历属性值
+            foreach (var item in pros)
+            {
+                //判断是不是主键带id 比如studentid
+                if (!(type.Name.ToString().ToLower() + "id").Equals(item.Name.ToString().ToLower()))
+                {
+                    sb.Append("@" + item.Name.ToString() + ",");
+                }
+            }
+            //insert into student(studentName,studentSex) values(@studentName,@studentSex,
+            //截取最后的,
+            sb.ToString().Substring(0, sb.ToString().LastIndexOf(','));
+            //insert into student(studentName,studentSex) values(@studentName,@studentSex
+            sb.Append(");");
+            //insert into student(studentName,studentSex) values(@studentName,@studentSex)
+            int i = 0;
+            try
+            {
+                conn.Open();
+                i = conn.Execute(sb.ToString(), t);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return i;
         }
         /// <summary>
         /// 数据显示
         /// </summary>
-        /// <returns></returns>
+        /// <returns>获取到表中所有的数据</returns>
         public static List<T> Show()
         {
             Type type = typeof(T);
-            StringBuilder str = new StringBuilder("select * from " + type.Name.ToLower());
+            StringBuilder str = new StringBuilder("select * from " + type.Name.ToLower()+";");
             conn.Open();
             List<T> list = new List<T>();
             try
@@ -57,69 +98,81 @@ namespace DAL
             }
             return list;
         }
-        public List<T> GetAll()
+        /// <summary>
+        /// 根据Id删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static int Delete(int id)
         {
-            using (IDbConnection conn = new SqlConnection(conStr))
+            Type type = typeof(T);
+            //获取model中属性
+            PropertyInfo[] pros = type.GetProperties();
+            //实例化字符串进行拼接
+            StringBuilder sb = new StringBuilder();
+            sb.Append("delete from " + type.Name.ToString() + " where " + type.Name.ToString() + "Id=@id;");
+            int i = 0;
+            try
             {
-                Type type = typeof(T);
-                string sql = "select *from " + type.Name;
-                return conn.Query<T>(sql).ToList();
+                conn.Open();
+                i = conn.Execute(sb.ToString(), id);
             }
-        }
-        public IEnumerable<dynamic> GetAll(string procName)
-        {
-            using (IDbConnection conn = new SqlConnection(conStr))
+            catch (Exception)
             {
-                return conn.Query(procName, commandType: CommandType.StoredProcedure);
-            }
-        }
-        public int Delete(int id)
-        {
-            using (IDbConnection conn = new SqlConnection(conStr))
-            {
-                Type type = typeof(T);
-                PropertyInfo[] pros = type.GetProperties();
-                string sql = "delete from " + type.Name + " where ";
-                foreach (var item in pros)
-                {
-                    if (item.GetCustomAttribute(typeof(KeyAttribute), true) != null)
-                    {
-                        sql += item.Name + " = @Id";
-                    }
-                }
-                return conn.Execute(sql, new { Id = id });
-            }
-        }
-        public int Update(T t)
-        {
-            using (IDbConnection conn = new SqlConnection(conStr))
-            {
-                Type type = typeof(T);
-                var prop = type.GetProperties();
-                StringBuilder sb = new StringBuilder();
-                sb.Append("update " + type.Name + " set ");
-                StringBuilder sb2 = new StringBuilder();
-                sb2.Append(" where ");
-                string str = "";
-                foreach (var item in prop)
-                {
-                    if (item.GetCustomAttribute(typeof(KeyAttribute), true) != null)
-                    {
-                        sb2.Append(item.Name + "=@" + item.Name);
-                    }
-                    else
-                    {
-                        if (item.GetValue(t) != null)
-                        {
-                            sb.Append(item.Name + "=@" + item.Name + ",");
-                        }
 
-                    }
-                }
-                str = sb.ToString().Substring(0, sb.Length - 1) + sb2.ToString();
-                return conn.Execute(str, t);
+                throw;
             }
+            finally
+            {
+                conn.Close();
+            }
+            return i;
+        }
+        /// <summary>
+        /// 修改使用方法
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static int Update(T t)
+        {
+            Type type = typeof(T);
+            //获取属性
+            PropertyInfo[] pros = type.GetProperties();
+            //实例化字符串进行拼接
+            StringBuilder sb = new StringBuilder();
+            sb.Append("update" + type.Name + "set ");
+            //update student set 
+            //遍历属性值
+            foreach (var item in pros)
+            {
+                //判断是不是主键带id 比如studentid
+                if (!(type.Name.ToString().ToLower() + "id").Equals(item.Name.ToString().ToLower()))
+                {
+                    sb.Append(item.Name.ToString() + "=@" + item.Name.ToString()+",");
+                }
+            }
+            //update student set studentName=@studentName,studentSex=@studentSex, 
+            //截取最后的,
+            sb.ToString().Substring(0, sb.ToString().LastIndexOf(','));
+            //update student set studentName=@studentName,studentSex=@studentSex
+            sb.Append(" where "+type.Name.ToString()+"Id=@"+ type.Name.ToString()+"Id;");
+            //update student set studentName=@studentName,studentSex=@studentSex where studentId=@studentId;
+            int i = 0;
+            try
+            {
+                conn.Open();
+                i = conn.Execute(sb.ToString(), t);
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return i;
         }
     }
 }
