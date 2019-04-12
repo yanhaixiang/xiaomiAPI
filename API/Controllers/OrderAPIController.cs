@@ -12,6 +12,7 @@ namespace API.Controllers
 {
     public class OrderAPIController : ApiController
     {
+        [HttpGet]
         public List<Order> GetOrders()
         {
             return GetBll<Order>.CreateDal().Show();
