@@ -1,0 +1,13 @@
+﻿{
+  "components": [
+    {
+      "type": "BLL.UserBLL,BLL", //第一个:命名空间下的哪个类,第二个:类所在的命名空间
+      "services": [
+        {
+          "type": "Common.IUser,Common" //第一个:命名空间下的哪个接口,第二个:接口所在的命名空间
+        }
+      ],
+      "injectProperties": true
+    }
+  ]
+}
