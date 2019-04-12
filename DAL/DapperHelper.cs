@@ -39,9 +39,10 @@ namespace DAL
                     }
                 }
             }
+
             //insert into student(studentName,studentSex,
             //截取最后的,
-            sb.ToString().Substring(0, sb.ToString().LastIndexOf(','));
+            sb.Replace(sb.ToString(), sb.ToString().Substring(0, sb.ToString().LastIndexOf(',')));
             //insert into student(studentName,studentSex
             sb.Append(") values(");
             //insert into student(studentName,studentSex) values(
@@ -60,7 +61,7 @@ namespace DAL
             }
             //insert into student(studentName,studentSex) values(@studentName,@studentSex,
             //截取最后的,
-            sb.ToString().Substring(0, sb.ToString().LastIndexOf(','));
+            sb.Replace(sb.ToString(), sb.ToString().Substring(0, sb.ToString().LastIndexOf(',')));
             //insert into student(studentName,studentSex) values(@studentName,@studentSex
             sb.Append(");");
             //insert into student(studentName,studentSex) values(@studentName,@studentSex)
@@ -163,7 +164,7 @@ namespace DAL
             }
             //update student set studentName=@studentName,studentSex=@studentSex, 
             //截取最后的,
-            sb.ToString().Substring(0, sb.ToString().LastIndexOf(','));
+            sb.Replace(sb.ToString(), sb.ToString().Substring(0, sb.ToString().LastIndexOf(',')));
             //update student set studentName=@studentName,studentSex=@studentSex
             //添加id判断
             sb.Append(" where " + type.Name.ToString() + "Id=@" + type.Name.ToString() + "Id;");

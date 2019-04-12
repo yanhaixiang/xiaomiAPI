@@ -13,7 +13,7 @@ namespace Model
         public string ShopName { get; set; }
         public string ShopTitle { get; set; }
         public string ShopPicture { get; set; }
-        public string ShopDetails { get; set; }
+        public string ShopDatails { get; set; }
         public float ShopPirce { get; set; }
         public int ShopSum { get; set; }
         public int ShopState { get; set; }
