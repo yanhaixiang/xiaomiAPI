@@ -12,20 +12,17 @@ namespace API.Controllers
 {
     public class UserAPIController : ApiController
     {
-        //public IUser<User> GetUser { get; set; }
-        UserBLL bll = new UserBLL();
+        
         [HttpPost]
         public int Create(User user)
         {
-            return bll.Create(user);
-            //return GetUser.Create(user);
+            return GetBll<User>.CreateDal().Create(user);
         }
 
         [HttpGet]
         public List<User> GetUsers()
         {
-            return bll.GetUsers().ToList();
-            //return GetUser.GetUsers().ToList();
+            return GetBll<User>.CreateDal().Show();
         }
     }
 }

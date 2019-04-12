@@ -12,7 +12,7 @@ namespace Model
         public string UserName { get; set; }
         public string UserPwd { get; set; }
         public string UserPhone { get; set; }
-        public int UserMemeber { get; set; }
+        public int UserMember { get; set; }
         public int UserIntegral { get; set; }
     }
 }

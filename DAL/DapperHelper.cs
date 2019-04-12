@@ -8,25 +8,26 @@ using System.Data;
 using System.Reflection;
 using MySql.Data.MySqlClient;
 using System.Configuration;
+using Common;
 
 namespace DAL
 {
-    public class DapperHelper<T>
-    {
+    public class DapperHelper<T>:IDAL<T> where T:new()
+    { 
         static IDbConnection conn = new MySqlConnection(ConfigurationSettings.AppSettings["ConnString"]);
         /// <summary>
         /// 数据的添加
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public static int Create(T t)
+        public  int Create(T t)
         {
             Type type = typeof(T);
             //获取属性
             PropertyInfo[] pros = type.GetProperties();
             //实例化字符串进行拼接
             StringBuilder sb = new StringBuilder();
-            sb.Append("insert into " + type.Name + "(");
+            sb.Append("insert into `" + type.Name + "`(");
             //遍历属性值
             foreach (var item in pros)
             {
@@ -39,9 +40,10 @@ namespace DAL
                     }
                 }
             }
+
             //insert into student(studentName,studentSex,
             //截取最后的,
-            sb.ToString().Substring(0, sb.ToString().LastIndexOf(','));
+            sb.Replace(sb.ToString(), sb.ToString().Substring(0, sb.ToString().LastIndexOf(',')));
             //insert into student(studentName,studentSex
             sb.Append(") values(");
             //insert into student(studentName,studentSex) values(
@@ -60,7 +62,7 @@ namespace DAL
             }
             //insert into student(studentName,studentSex) values(@studentName,@studentSex,
             //截取最后的,
-            sb.ToString().Substring(0, sb.ToString().LastIndexOf(','));
+            sb.Replace(sb.ToString(), sb.ToString().Substring(0, sb.ToString().LastIndexOf(',')));
             //insert into student(studentName,studentSex) values(@studentName,@studentSex
             sb.Append(");");
             //insert into student(studentName,studentSex) values(@studentName,@studentSex)
@@ -85,10 +87,11 @@ namespace DAL
         /// 数据显示
         /// </summary>
         /// <returns>获取到表中所有的数据</returns>
-        public static List<T> Show()
+        public  List<T> Show()
+
         {
             Type type = typeof(T);
-            StringBuilder str = new StringBuilder("select * from " + type.Name.ToLower() + ";");
+            StringBuilder str = new StringBuilder("select * from `" + type.Name.ToLower() + "`;");
             conn.Open();
             List<T> list = new List<T>();
             try
@@ -110,14 +113,14 @@ namespace DAL
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static int Delete(int id)
+        public  int Del(int id)
         {
             Type type = typeof(T);
             //获取model中属性
             PropertyInfo[] pros = type.GetProperties();
             //实例化字符串进行拼接
             StringBuilder sb = new StringBuilder();
-            sb.Append("delete from " + type.Name.ToString() + " where " + type.Name.ToString() + "Id=@id;");
+            sb.Append("delete from `" + type.Name.ToString() + "` where " + type.Name.ToString() + "Id=@id;");
             int i = 0;
             try
             {
@@ -140,14 +143,14 @@ namespace DAL
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public static int Update(T t)
+        public  int Upt(T t)
         {
             Type type = typeof(T);
             //获取属性
             PropertyInfo[] pros = type.GetProperties();
             //实例化字符串进行拼接
             StringBuilder sb = new StringBuilder();
-            sb.Append("update" + type.Name + "set ");
+            sb.Append("update `" + type.Name + "` set ");
             //update student set 
             //遍历属性值
             foreach (var item in pros)
@@ -163,7 +166,7 @@ namespace DAL
             }
             //update student set studentName=@studentName,studentSex=@studentSex, 
             //截取最后的,
-            sb.ToString().Substring(0, sb.ToString().LastIndexOf(','));
+            sb.Replace(sb.ToString(), sb.ToString().Substring(0, sb.ToString().LastIndexOf(',')));
             //update student set studentName=@studentName,studentSex=@studentSex
             //添加id判断
             sb.Append(" where " + type.Name.ToString() + "Id=@" + type.Name.ToString() + "Id;");
