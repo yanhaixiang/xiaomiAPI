@@ -27,7 +27,7 @@ namespace DAL
             PropertyInfo[] pros = type.GetProperties();
             //实例化字符串进行拼接
             StringBuilder sb = new StringBuilder();
-            sb.Append("insert into " + type.Name + "(");
+            sb.Append("insert into `" + type.Name + "`(");
             //遍历属性值
             foreach (var item in pros)
             {
@@ -91,7 +91,7 @@ namespace DAL
 
         {
             Type type = typeof(T);
-            StringBuilder str = new StringBuilder("select * from " + type.Name.ToLower() + ";");
+            StringBuilder str = new StringBuilder("select * from `" + type.Name.ToLower() + "`;");
             conn.Open();
             List<T> list = new List<T>();
             try
@@ -120,7 +120,7 @@ namespace DAL
             PropertyInfo[] pros = type.GetProperties();
             //实例化字符串进行拼接
             StringBuilder sb = new StringBuilder();
-            sb.Append("delete from " + type.Name.ToString() + " where " + type.Name.ToString() + "Id=@id;");
+            sb.Append("delete from `" + type.Name.ToString() + "` where " + type.Name.ToString() + "Id=@id;");
             int i = 0;
             try
             {
@@ -150,7 +150,7 @@ namespace DAL
             PropertyInfo[] pros = type.GetProperties();
             //实例化字符串进行拼接
             StringBuilder sb = new StringBuilder();
-            sb.Append("update" + type.Name + "set ");
+            sb.Append("update `" + type.Name + "` set ");
             //update student set 
             //遍历属性值
             foreach (var item in pros)
