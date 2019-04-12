@@ -12,7 +12,7 @@ using System.Configuration;
 namespace DAL
 {
     public class DapperHelper<T>
-    {
+    { 
         static IDbConnection conn = new MySqlConnection(ConfigurationSettings.AppSettings["ConnString"]);
         /// <summary>
         /// 数据的添加
