@@ -8,10 +8,11 @@ using System.Data;
 using System.Reflection;
 using MySql.Data.MySqlClient;
 using System.Configuration;
+using Common;
 
 namespace DAL
 {
-    public class DapperHelper<T>
+    public class DapperHelper<T>:IDAL<T> where T:new()
     { 
         static IDbConnection conn = new MySqlConnection(ConfigurationSettings.AppSettings["ConnString"]);
         /// <summary>
@@ -19,7 +20,7 @@ namespace DAL
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public static int Create(T t)
+        public  int Create(T t)
         {
             Type type = typeof(T);
             //获取属性
@@ -86,7 +87,8 @@ namespace DAL
         /// 数据显示
         /// </summary>
         /// <returns>获取到表中所有的数据</returns>
-        public static List<T> Show()
+        public  List<T> Show()
+
         {
             Type type = typeof(T);
             StringBuilder str = new StringBuilder("select * from " + type.Name.ToLower() + ";");
@@ -111,7 +113,7 @@ namespace DAL
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static int Delete(int id)
+        public  int Del(int id)
         {
             Type type = typeof(T);
             //获取model中属性
@@ -141,7 +143,7 @@ namespace DAL
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public static int Update(T t)
+        public  int Upt(T t)
         {
             Type type = typeof(T);
             //获取属性
