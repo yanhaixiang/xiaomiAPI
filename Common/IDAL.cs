@@ -7,10 +7,10 @@ using Model;
 
 namespace Common
 {
-    public interface IUser<T>
+    public interface IDAL<T>
     {
         int Create(T t);
-        IEnumerable<T> GetUsers();
+        List<T> Show();
         int Del(int id);
         int Upt(T t);
     }
