@@ -33,12 +33,16 @@ namespace DAL
                 //判断是不是主键带id 比如studentid
                 if (!(type.Name.ToString().ToLower() + "id").Equals(item.Name.ToString().ToLower()))
                 {
-                    sb.Append(item.Name.ToString() + ",");
+                    if (item.GetValue(t, null).ToString() != null)
+                    {
+                        sb.Append(item.Name.ToString() + ",");
+                    }
                 }
             }
+
             //insert into student(studentName,studentSex,
             //截取最后的,
-            sb.ToString().Substring(0, sb.ToString().LastIndexOf(','));
+            sb.Replace(sb.ToString(), sb.ToString().Substring(0, sb.ToString().LastIndexOf(',')));
             //insert into student(studentName,studentSex
             sb.Append(") values(");
             //insert into student(studentName,studentSex) values(
@@ -48,12 +52,16 @@ namespace DAL
                 //判断是不是主键带id 比如studentid
                 if (!(type.Name.ToString().ToLower() + "id").Equals(item.Name.ToString().ToLower()))
                 {
-                    sb.Append("@" + item.Name.ToString() + ",");
+                    if (item.GetValue(t, null).ToString() != null)
+                    {
+                        sb.Append("@" + item.Name.ToString() + ",");
+                    }
+
                 }
             }
             //insert into student(studentName,studentSex) values(@studentName,@studentSex,
             //截取最后的,
-            sb.ToString().Substring(0, sb.ToString().LastIndexOf(','));
+            sb.Replace(sb.ToString(), sb.ToString().Substring(0, sb.ToString().LastIndexOf(',')));
             //insert into student(studentName,studentSex) values(@studentName,@studentSex
             sb.Append(");");
             //insert into student(studentName,studentSex) values(@studentName,@studentSex)
@@ -81,7 +89,7 @@ namespace DAL
         public static List<T> Show()
         {
             Type type = typeof(T);
-            StringBuilder str = new StringBuilder("select * from " + type.Name.ToLower()+";");
+            StringBuilder str = new StringBuilder("select * from " + type.Name.ToLower() + ";");
             conn.Open();
             List<T> list = new List<T>();
             try
@@ -148,14 +156,18 @@ namespace DAL
                 //判断是不是主键带id 比如studentid
                 if (!(type.Name.ToString().ToLower() + "id").Equals(item.Name.ToString().ToLower()))
                 {
-                    sb.Append(item.Name.ToString() + "=@" + item.Name.ToString()+",");
+                    if (item.GetValue(t, null).ToString() != null)
+                    {
+                        sb.Append(item.Name.ToString() + "=@" + item.Name.ToString() + ",");
+                    }
                 }
             }
             //update student set studentName=@studentName,studentSex=@studentSex, 
             //截取最后的,
-            sb.ToString().Substring(0, sb.ToString().LastIndexOf(','));
+            sb.Replace(sb.ToString(), sb.ToString().Substring(0, sb.ToString().LastIndexOf(',')));
             //update student set studentName=@studentName,studentSex=@studentSex
-            sb.Append(" where "+type.Name.ToString()+"Id=@"+ type.Name.ToString()+"Id;");
+            //添加id判断
+            sb.Append(" where " + type.Name.ToString() + "Id=@" + type.Name.ToString() + "Id;");
             //update student set studentName=@studentName,studentSex=@studentSex where studentId=@studentId;
             int i = 0;
             try
