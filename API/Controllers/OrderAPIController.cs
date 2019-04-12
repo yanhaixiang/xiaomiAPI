@@ -17,5 +17,21 @@ namespace API.Controllers
         {
             return GetBll<Order>.CreateDal().Show();
         }
+        [HttpPost]
+        public int Create(Order order)
+        {
+            return GetBll<Order>.CreateDal().Create(order);
+        }
+        [HttpDelete]
+        public int Del(int id)
+        {
+            return GetBll<Order>.CreateDal().Del(id);
+        }
+        [HttpPut]
+        public int Upt(Order order)
+        {
+            return GetBll<Order>.CreateDal().Upt(order);
+        }
+
     }
 }
