@@ -13,5 +13,6 @@ namespace Model
         public string AddressDetail { get; set; }
         public string Phone { get; set; }
         public int UserId { get; set; }
+        public int MoRen { get; set; }
     }
 }
