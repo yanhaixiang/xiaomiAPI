@@ -207,7 +207,7 @@
     <Compile Include="Controllers\AddressAPIController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderAPIController.cs" />
-    <Compile Include="Controllers\ShopAPI0Controller.cs" />
+    <Compile Include="Controllers\ShopAPIController.cs" />
     <Compile Include="Controllers\UserAPIController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">

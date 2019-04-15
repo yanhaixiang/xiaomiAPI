@@ -9,7 +9,7 @@ using BLL;
 
 namespace API.Controllers
 {
-    public class ShopAPI0Controller : ApiController
+    public class ShopAPIController : ApiController
     {
         [HttpGet]
         public List<Shop> GetShops()
