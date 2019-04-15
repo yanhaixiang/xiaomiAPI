@@ -24,5 +24,15 @@ namespace API.Controllers
         {
             return GetBll<User>.CreateDal().Show();
         }
+        [HttpDelete]
+        public int Del(int id)
+        {
+            return GetBll<User>.CreateDal().Del(id);
+        }
+        [HttpPut]
+        public int Upt(User user)
+        {
+            return GetBll<User>.CreateDal().Upt(user);
+        }
     }
 }
