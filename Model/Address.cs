@@ -12,5 +12,6 @@ namespace Model
         public string HarvestName { get; set; }
         public string AddressDetail { get; set; }
         public string Phone { get; set; }
+        public int UserId { get; set; }
     }
 }

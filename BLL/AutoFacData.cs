@@ -15,6 +15,7 @@ namespace BLL
         {
             try
             {
+
                 ContainerBuilder builder = new ContainerBuilder();
                 builder.RegisterGeneric(typeof(DapperHelper<>)).As(typeof(IDAL<>));
                 using (var container=builder.Build())
@@ -22,10 +23,11 @@ namespace BLL
                     var manager = container.Resolve<IDAL<T>>();
                     return manager;
                 }
+
             }
             catch (Exception e)
             {
-                return default(IDAL<T>);
+                throw new Exception("发生错误");
             }
         }
     }
