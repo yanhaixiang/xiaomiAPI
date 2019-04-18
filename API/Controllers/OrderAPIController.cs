@@ -33,5 +33,11 @@ namespace API.Controllers
             return GetBll<Order>.CreateDal().Upt(order);
         }
 
+        [HttpGet]
+        public List<Order> GetOrders(int TJ)
+        {
+            return GetOrders().Where(m => m.OrderState == TJ).ToList();
+        }
+
     }
 }
