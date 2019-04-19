@@ -10,6 +10,7 @@ using BLL;
 
 namespace API.Controllers
 {
+    [ApiSecurityFilter]
     public class OrderAPIController : ApiController
     {
         [HttpGet]
