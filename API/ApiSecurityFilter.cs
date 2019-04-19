@@ -73,7 +73,7 @@ namespace API
                 {
                     if (!string.IsNullOrEmpty(sort.Key))
                     {
-                        query.Append(sort.Key).Append(sort.Value);
+                        query.Append(sort.Key).Append(sort.Value.ToString());
                     }
                 }
                 data = query.ToString().Replace(" ", "");
@@ -81,9 +81,9 @@ namespace API
 
             //生产签名并和客户端传递的签名对比
 
-            var md5 = FormsAuthentication.HashPasswordForStoringInConfigFile(timestamp + nonce + staffid + data, "MD5").ToLower();
+            string md5 = FormsAuthentication.HashPasswordForStoringInConfigFile(timestamp + nonce + staffid + data, "MD5").ToLower();
 
-            if (!md5.Equals(singture.ToLower()))
+            if (!md5.Equals(FormsAuthentication.HashPasswordForStoringInConfigFile(singture,"MD5").ToLower()))
             {
                 throw new Exception("无权访问");
             }
