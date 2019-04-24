@@ -14,8 +14,8 @@ namespace Model
         public int Freight { get; set; }
         public int OrderState { get; set; }
         public float TurePrice { get; set; }
-        public DateTime PaymentTime { get; set; }
-        public DateTime ShipmentTime { get; set; }
-        public DateTime HarvestTime { get; set; }
+        public string PaymentTime { get; set; }
+        public string ShipmentTime { get; set; }
+        public string HarvestTime { get; set; }
     }
 }
